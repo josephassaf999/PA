@@ -11,7 +11,7 @@ void main() async {
   // Initialize Firebase
   await Firebase.initializeApp(
     options: const FirebaseOptions(
-      apiKey: 'AIzaSyDEh6Wq5PrP5jECYCPBbj1cQEEj2qvqP0U',
+      apiKey: 'AIzaSyC4k54iqlg6OZIaXOezu6jkcwHrFvy7Ih4',
       appId: '1:591953709360:android:451b5dab8a50dc7646e0f5',
       projectId: 'personal-assistant-8eb7d',
       storageBucket: 'personal-assistant-8eb7d.appspot.com',
