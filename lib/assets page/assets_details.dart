@@ -10,38 +10,6 @@ class AssetDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Format the date and time for due date
-    String formattedDate = '';
-    String formattedTime = '';
-    if (asset.date is Timestamp) {
-      DateTime dueDate =
-          (asset.date as Timestamp).toDate(); // Convert Timestamp to DateTime
-      formattedDate = DateFormat.yMMMd().format(dueDate.toLocal());
-      formattedTime = DateFormat.Hm()
-          .format(dueDate.toLocal()); // Format time as hour:minute
-    } else if (asset.date is DateTime) {
-      DateTime dueDate = asset.date as DateTime; // Use DateTime directly
-      formattedDate = DateFormat.yMMMd().format(dueDate.toLocal());
-      formattedTime = DateFormat.Hm().format(dueDate.toLocal());
-    }
-
-    // Format the created date and time
-    String formattedCreatedAtDate = '';
-    String formattedCreatedAtTime = '';
-    if (asset.createdAt is Timestamp) {
-      DateTime createdAtDate = (asset.createdAt as Timestamp)
-          .toDate(); // Convert Timestamp to DateTime
-      formattedCreatedAtDate =
-          DateFormat.yMMMd().format(createdAtDate.toLocal());
-      formattedCreatedAtTime = DateFormat.Hm().format(createdAtDate.toLocal());
-    } else if (asset.createdAt is DateTime) {
-      DateTime createdAtDate =
-          asset.createdAt as DateTime; // Use DateTime directly
-      formattedCreatedAtDate =
-          DateFormat.yMMMd().format(createdAtDate.toLocal());
-      formattedCreatedAtTime = DateFormat.Hm().format(createdAtDate.toLocal());
-    }
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
@@ -77,7 +45,7 @@ class AssetDetailsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Due date: $formattedDate',
+                    'Due date: ${_formatDate(asset.date)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -85,7 +53,7 @@ class AssetDetailsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Due time: $formattedTime', // Display the time
+                    'Due time: ${_formatTime(asset.date)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -99,7 +67,7 @@ class AssetDetailsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Created at: $formattedCreatedAtDate',
+                    'Created at: ${_formatDate(asset.createdAt)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -107,7 +75,7 @@ class AssetDetailsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Created time: $formattedCreatedAtTime',
+                    'Created time: ${_formatTime(asset.createdAt)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -127,5 +95,43 @@ class AssetDetailsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Helper method to format the date
+  String _formatDate(dynamic date) {
+    if (date is Timestamp) {
+      return DateFormat.yMMMd().format((date as Timestamp).toDate());
+    } else if (date is DateTime) {
+      return DateFormat.yMMMd().format(date);
+    } else if (date is String) {
+      try {
+        DateTime parsedDate =
+            DateTime.parse(date); // Parsing the string to DateTime
+        return DateFormat.yMMMd().format(parsedDate);
+      } catch (e) {
+        return 'Invalid date format';
+      }
+    } else {
+      return 'No date available';
+    }
+  }
+
+  // Helper method to format the time
+  String _formatTime(dynamic date) {
+    if (date is Timestamp) {
+      return DateFormat.Hm().format((date as Timestamp).toDate());
+    } else if (date is DateTime) {
+      return DateFormat.Hm().format(date);
+    } else if (date is String) {
+      try {
+        DateTime parsedDate =
+            DateTime.parse(date); // Parsing the string to DateTime
+        return DateFormat.Hm().format(parsedDate);
+      } catch (e) {
+        return 'Invalid time format';
+      }
+    } else {
+      return 'No time available';
+    }
   }
 }

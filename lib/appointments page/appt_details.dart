@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:personal_assistant_app/appointments page/appointment.dart';
+import 'package:personal_assistant_app/appointments%20page/appointment.dart';
 
 class AppointmentDetailPage extends StatelessWidget {
   final Appointment appointment;
@@ -10,38 +10,6 @@ class AppointmentDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Format the date and time for due date
-    String formattedDate = '';
-    String formattedTime = '';
-    if (appointment.date is Timestamp) {
-      DateTime dueDate = (appointment.date as Timestamp)
-          .toDate(); // Convert Timestamp to DateTime
-      formattedDate = DateFormat.yMMMd().format(dueDate.toLocal());
-      formattedTime = DateFormat.Hm()
-          .format(dueDate.toLocal()); // Format time as hour:minute
-    } else if (appointment.date is DateTime) {
-      DateTime dueDate = appointment.date as DateTime; // Use DateTime directly
-      formattedDate = DateFormat.yMMMd().format(dueDate.toLocal());
-      formattedTime = DateFormat.Hm().format(dueDate.toLocal());
-    }
-
-    // Format the created date and time
-    String formattedCreatedAtDate = '';
-    String formattedCreatedAtTime = '';
-    if (appointment.createdAt is Timestamp) {
-      DateTime createdAtDate = (appointment.createdAt as Timestamp)
-          .toDate(); // Convert Timestamp to DateTime
-      formattedCreatedAtDate =
-          DateFormat.yMMMd().format(createdAtDate.toLocal());
-      formattedCreatedAtTime = DateFormat.Hm().format(createdAtDate.toLocal());
-    } else if (appointment.createdAt is DateTime) {
-      DateTime createdAtDate =
-          appointment.createdAt as DateTime; // Use DateTime directly
-      formattedCreatedAtDate =
-          DateFormat.yMMMd().format(createdAtDate.toLocal());
-      formattedCreatedAtTime = DateFormat.Hm().format(createdAtDate.toLocal());
-    }
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
@@ -77,7 +45,7 @@ class AppointmentDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Due date: $formattedDate',
+                    'Due date: ${_formatDate(appointment.date)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -85,7 +53,7 @@ class AppointmentDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Due time: $formattedTime', // Display the time
+                    'Due time: ${_formatTime(appointment.date)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -99,7 +67,7 @@ class AppointmentDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Created at: $formattedCreatedAtDate',
+                    'Created at: ${_formatDate(appointment.createdAt)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -107,7 +75,7 @@ class AppointmentDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Created time: $formattedCreatedAtTime',
+                    'Created time: ${_formatTime(appointment.createdAt)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -127,5 +95,43 @@ class AppointmentDetailPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Helper method to format the date
+  String _formatDate(dynamic date) {
+    if (date is Timestamp) {
+      return DateFormat.yMMMd().format((date as Timestamp).toDate());
+    } else if (date is DateTime) {
+      return DateFormat.yMMMd().format(date);
+    } else if (date is String) {
+      try {
+        DateTime parsedDate =
+            DateTime.parse(date); // Parsing the string to DateTime
+        return DateFormat.yMMMd().format(parsedDate);
+      } catch (e) {
+        return 'Invalid date format';
+      }
+    } else {
+      return 'No date available';
+    }
+  }
+
+  // Helper method to format the time
+  String _formatTime(dynamic date) {
+    if (date is Timestamp) {
+      return DateFormat.Hm().format((date as Timestamp).toDate());
+    } else if (date is DateTime) {
+      return DateFormat.Hm().format(date);
+    } else if (date is String) {
+      try {
+        DateTime parsedDate =
+            DateTime.parse(date); // Parsing the string to DateTime
+        return DateFormat.Hm().format(parsedDate);
+      } catch (e) {
+        return 'Invalid time format';
+      }
+    } else {
+      return 'No time available';
+    }
   }
 }
