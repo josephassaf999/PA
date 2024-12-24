@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:personal_assistant_app/settings%20page/theme_notifier.dart';
 import 'package:personal_assistant_app/welcomepage.dart';
-import 'package:personal_assistant_app/NotificationService.dart'; // Import the service
+import 'package:personal_assistant_app/NotificationService.dart';
 import 'package:provider/provider.dart';
+import 'package:personal_assistant_app/firebase_init.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Firebase
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-      apiKey: 'AIzaSyC4k54iqlg6OZIaXOezu6jkcwHrFvy7Ih4',
-      appId: '1:591953709360:android:451b5dab8a50dc7646e0f5',
-      projectId: 'personal-assistant-8eb7d',
-      storageBucket: 'personal-assistant-8eb7d.appspot.com',
-      messagingSenderId: '591953709360',
-    ),
-  );
+  await initializeFirebase();
 
   // Initialize Notification Service
   final notificationService = NotificationService(); // Create an instance
