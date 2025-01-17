@@ -10,38 +10,6 @@ class TaskDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Format the date and time for due date
-    String formattedDate = '';
-    String formattedTime = '';
-    if (task.date is Timestamp) {
-      DateTime dueDate =
-          (task.date as Timestamp).toDate(); // Convert Timestamp to DateTime
-      formattedDate = DateFormat.yMMMd().format(dueDate.toLocal());
-      formattedTime = DateFormat.Hm()
-          .format(dueDate.toLocal()); // Format time as hour:minute
-    } else if (task.date is DateTime) {
-      DateTime dueDate = task.date as DateTime; // Use DateTime directly
-      formattedDate = DateFormat.yMMMd().format(dueDate.toLocal());
-      formattedTime = DateFormat.Hm().format(dueDate.toLocal());
-    }
-
-    // Format the created date and time
-    String formattedCreatedAtDate = '';
-    String formattedCreatedAtTime = '';
-    if (task.createdAt is Timestamp) {
-      DateTime createdAtDate = (task.createdAt as Timestamp)
-          .toDate(); // Convert Timestamp to DateTime
-      formattedCreatedAtDate =
-          DateFormat.yMMMd().format(createdAtDate.toLocal());
-      formattedCreatedAtTime = DateFormat.Hm().format(createdAtDate.toLocal());
-    } else if (task.createdAt is DateTime) {
-      DateTime createdAtDate =
-          task.createdAt as DateTime; // Use DateTime directly
-      formattedCreatedAtDate =
-          DateFormat.yMMMd().format(createdAtDate.toLocal());
-      formattedCreatedAtTime = DateFormat.Hm().format(createdAtDate.toLocal());
-    }
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
@@ -77,7 +45,7 @@ class TaskDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Due date: $formattedDate',
+                    'Due date: ${_formatDate(task.date)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -85,7 +53,7 @@ class TaskDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Due time: $formattedTime', // Display the time
+                    'Due time: ${_formatTime(task.date)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -94,20 +62,12 @@ class TaskDetailPage extends StatelessWidget {
                 ],
               ),
             const SizedBox(height: 8),
-            Text(
-              'Priority: ${task.priority}', // Display the task's priority
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
             if (task.createdAt != null)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Created at: $formattedCreatedAtDate',
+                    'Created at: ${_formatDate(task.createdAt)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -115,7 +75,7 @@ class TaskDetailPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Created time: $formattedCreatedAtTime',
+                    'Created time: ${_formatTime(task.createdAt)}',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -135,5 +95,43 @@ class TaskDetailPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Helper method to format the date
+  String _formatDate(dynamic date) {
+    if (date is Timestamp) {
+      return DateFormat.yMMMd().format((date as Timestamp).toDate());
+    } else if (date is DateTime) {
+      return DateFormat.yMMMd().format(date);
+    } else if (date is String) {
+      try {
+        DateTime parsedDate =
+            DateTime.parse(date); // Parsing the string to DateTime
+        return DateFormat.yMMMd().format(parsedDate);
+      } catch (e) {
+        return 'Invalid date format';
+      }
+    } else {
+      return 'No date available';
+    }
+  }
+
+  // Helper method to format the time
+  String _formatTime(dynamic date) {
+    if (date is Timestamp) {
+      return DateFormat.Hm().format((date as Timestamp).toDate());
+    } else if (date is DateTime) {
+      return DateFormat.Hm().format(date);
+    } else if (date is String) {
+      try {
+        DateTime parsedDate =
+            DateTime.parse(date); // Parsing the string to DateTime
+        return DateFormat.Hm().format(parsedDate);
+      } catch (e) {
+        return 'Invalid time format';
+      }
+    } else {
+      return 'No time available';
+    }
   }
 }
