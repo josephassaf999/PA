@@ -1,3 +1,16 @@
+buildscript {
+    ext.kotlin_version = '1.8.20' // Or a compatible version, check for updates if needed
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.0.0' // Ensure this is compatible with Gradle 8.5+
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -5,10 +18,11 @@ allprojects {
     }
 }
 
-rootProject.buildDir = '../build'
+rootProject.buildDir = '../build' // Keep your custom build directory, make sure it's accessible
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
+
 subprojects {
     project.evaluationDependsOn(':app')
 }
